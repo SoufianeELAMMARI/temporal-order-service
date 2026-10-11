@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: order-service
+  temporal:
+    namespace: default
+    connection:
+      # Local dev server started with: temporal server start-dev
+      target: ${TEMPORAL_TARGET:localhost:7233}
+    workers-auto-discovery:
+      workflow-packages:
+        - com.acme.orders
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+
+logging:
+  level:
+    com.acme.orders: INFO

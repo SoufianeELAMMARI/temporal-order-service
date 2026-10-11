@@ -1,0 +1,37 @@
+### IntelliJ / VS Code REST Client requests. Run them top to bottom.
+
+### Place a high-value order (waits for approval)
+POST http://localhost:8080/orders
+Content-Type: application/json
+
+{
+  "orderId": "42",
+  "customerId": "cust-7",
+  "lines": [{ "sku": "SKU-1", "quantity": 3 }],
+  "total": 7500,
+  "shippingAddress": "1 Rue X, Casablanca"
+}
+
+### Same order again -> 409 Conflict (workflow id = order id)
+POST http://localhost:8080/orders
+Content-Type: application/json
+
+{
+  "orderId": "42",
+  "customerId": "cust-7",
+  "lines": [{ "sku": "SKU-1", "quantity": 3 }],
+  "total": 7500,
+  "shippingAddress": "1 Rue X, Casablanca"
+}
+
+### Query its status -> AWAITING_APPROVAL
+GET http://localhost:8080/orders/42
+
+### Approve (signal)
+POST http://localhost:8080/orders/42/approve?by=alice
+
+### Status -> COMPLETED with a tracking number
+GET http://localhost:8080/orders/42
+
+### Cancel (signal) - try it on a new order before approving
+POST http://localhost:8080/orders/42/cancel?reason=changed+my+mind
