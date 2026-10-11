@@ -10,6 +10,8 @@ spring:
       # Local dev server started with: temporal server start-dev
       target: ${TEMPORAL_TARGET:localhost:7233}
     workers-auto-discovery:
+      # Without this, only workflows are registered and activities never run
+      register-activity-beans: true
       workflow-packages:
         - com.acme.orders
 
